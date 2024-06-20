@@ -1,42 +1,34 @@
 import React, { useState } from 'react';
+import instance from '../../axios/instance';
 
-const ChatFooter = ( { socket } ) => {
+const ChatFooter = ( { socket, id, friendConversationId } ) => {
     const [ message, setMessage ] = useState( '' );
     const [ files, setFiles ] = useState( [] )
 
-    const handleFileChanges = ( e ) => {
-        const seletedFiles = Array.from( e.target.files );
-    }
-
-    // const handleUpload = async ( e ) => {
-    //     e.preventDefault()
-
-    //     try {
-    //         const formData = new FormData()
-    //         files.forEach( ( file, index ) => {
-    //             formData.append( `images-${ index }`, file )
-    //         } )
-
-    //         const response = await axios.post( '/upload', formData, {
-    //             headers: {
-    //                 'Content-Type': 'multipart/form-data'
-    //             }
-    //         } )
-    //     } catch ( err ) {
-    //         console.log( 'Error from image uploading :', err )
-    //     }
-    // }
-    const handleSendMessage = ( e ) => {
+    const handleSendMessage = async ( e ) => {
         e.preventDefault();
-        if ( message.trim() && localStorage.getItem( 'userName' ) ) {
-            socket.emit( 'message', {
-                text: message,
-                name: localStorage.getItem( 'userName' ),
-                id: `${ socket.id }${ Math.random() }`,
-                socketID: socket.id,
-                createdAt: Date.now()
-            } );
-        }
+        // if ( message.trim() && localStorage.getItem( 'userName' ) ) {
+        //     socket.emit( 'message', {
+        //         textmessage: message,
+        //         file: [],
+        //         name: localStorage.getItem( 'userName' ),
+        //         receiver_id: id,
+        //         friendsAndConversation_id: friendConversationId,
+        //         createdAt: Date.now()
+        //     } );
+        // }
+        console.log()
+        const { data } = await instance.post( '/message', {
+            textmessage: message,
+            file: [],
+            name: localStorage.getItem( 'userName' ),
+            receiver_id: id,
+            sender_id: localStorage.getItem( 'id' ),
+            friendsAndConversation_id: friendConversationId,
+            createdAt: Date.now()
+        } )
+        console.log( data )
+
         setMessage( '' );
     };
 

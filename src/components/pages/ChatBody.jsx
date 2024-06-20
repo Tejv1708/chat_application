@@ -4,52 +4,28 @@ import instance from '../../axios/instance';
 import ChatFooter from './ChatFooter';
 import { data } from 'autoprefixer';
 
-const ChatBody = ( { messages, user } ) => {
+const ChatBody = ( { messages, user, friendConversationId, id } ) => {
     const navigate = useNavigate();
     const [ isLoading, setIsLoading ] = useState( false );
-    const [ page, setPage ] = useState( 1 );
     const [ chatMessages, setChatMessages ] = useState( [] );
     const [ username, setUserName ] = useState( localStorage.getItem( "userName" ) )
-    const observer = useRef( null );
-    const lastMessageRef = useRef( null );
+
 
     useEffect( () => {
-        setChatMessages( messages );
+        try {
+            async function getMessage() {
+                const { data } = await instance.get( `/message/${ friendConversationId }/${ id }` )
+                setChatMessages( messages );
+                console.log( data )
+            }
+            getMessage()
+        } catch ( err ) {
+            console.log( err )
+        }
+
     }, [ messages ] );
 
-    useEffect( () => {
-        const fetchMoreMessages = async () => {
-            try {
-                setIsLoading( true );
-                const { data } = await instance.get( `?page=${ page }` );
-                setChatMessages( prevMessages => [ ...prevMessages, ...data ] );
-                setIsLoading( false );
-            } catch ( error ) {
-                console.error( 'Error fetching more messages:', error );
-                setIsLoading( false );
-            }
-        };
-
-        if ( observer.current && !isLoading ) {
-            observer.current.disconnect();
-        }
-
-        observer.current = new IntersectionObserver( entries => {
-            if ( entries[ 0 ].isIntersecting ) {
-                setPage( prevPage => prevPage + 1 );
-            }
-        } );
-
-        if ( lastMessageRef.current ) {
-            observer.current.observe( lastMessageRef.current );
-        }
-
-        return () => {
-            if ( observer.current ) {
-                observer.current.disconnect();
-            }
-        };
-    }, [ page, isLoading ] );
+    console.log( messages )
 
     const handleLeaveChat = async () => {
         localStorage.removeItem( 'userName' );

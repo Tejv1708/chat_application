@@ -28,7 +28,7 @@ const Home = ( { socket } ) => {
             socket.emit( 'new-user-added', {
                 data
             } )
-            localStorage.setItem( 'activeUser', name )
+            localStorage.setItem( 'userName', name )
             localStorage.setItem( 'id', data._id )
             navigate( '/users', { state: data._id } ); // Redirect to the chat page after signing in
         } catch ( error ) {

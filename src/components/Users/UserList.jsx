@@ -10,7 +10,7 @@ const UserList = ( { socket } ) => {
     const [ active, setActive ] = useState( [] )
     const [ isConnected, setIsConnected ] = useState( true )
     const [ check, setCheck ] = useState( true );
-    const [ showModel, setShowModel ] = useState( false );
+
 
 
     useEffect( () => {
