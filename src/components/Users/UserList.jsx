@@ -11,7 +11,17 @@ const UserList = ( { socket } ) => {
     const [ isConnected, setIsConnected ] = useState( true )
     const [ check, setCheck ] = useState( true );
 
+    useEffect( () => {
 
+        socket.on( 'receiverRequest', ( receiver_id ) => {
+            console.log( "Receiver Id ", receiver_id )
+            const userResponse = window.confirm( `You have a new request` )
+            const newStatus = userResponse ? 'accept' : 'reject'
+            console.log( newStatus )
+            setStatus( newStatus )
+            socket.emit( 'respondToRequest', { sender_id, id, status: newStatus } )
+        } )
+    }, [] )
 
     useEffect( () => {
         async function getAllUsers() {

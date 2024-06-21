@@ -7,29 +7,34 @@ const ChatFooter = ( { socket, id, friendConversationId } ) => {
 
     const handleSendMessage = async ( e ) => {
         e.preventDefault();
-        // if ( message.trim() && localStorage.getItem( 'userName' ) ) {
-        //     socket.emit( 'message', {
-        //         textmessage: message,
-        //         file: [],
-        //         name: localStorage.getItem( 'userName' ),
-        //         receiver_id: id,
-        //         friendsAndConversation_id: friendConversationId,
-        //         createdAt: Date.now()
-        //     } );
-        // }
-        console.log()
-        const { data } = await instance.post( '/message', {
-            textmessage: message,
-            file: [],
-            name: localStorage.getItem( 'userName' ),
-            receiver_id: id,
-            sender_id: localStorage.getItem( 'id' ),
-            friendsAndConversation_id: friendConversationId,
-            createdAt: Date.now()
-        } )
-        console.log( data )
+        try {
 
-        setMessage( '' );
+            if ( message.trim() && localStorage.getItem( 'userName' ) ) {
+                socket.emit( 'message', {
+                    message: message,
+                    file: [],
+                    name: localStorage.getItem( 'userName' ),
+                    receiver_id: id,
+                    sender_id: localStorage.getItem( 'id' ),
+                    friendsAndConversation_id: friendConversationId,
+                    createdAt: Date.now()
+                } );
+            }
+            // console.log( "Hii from footer" )
+            // const { data } = await instance.post( '/message', {
+            //     textmessage: message,
+            //     file: [],
+            //     name: localStorage.getItem( 'userName' ),
+            //     receiver_id: id,
+            //     sender_id: localStorage.getItem( 'id' ),
+            //     friendsAndConversation_id: friendConversationId,
+            //     createdAt: Date.now()
+            // } )
+            // console.log( "This is message data", data )
+            setMessage( '' );
+        } catch ( err ) {
+            console.log( err )
+        }
     };
 
     return (

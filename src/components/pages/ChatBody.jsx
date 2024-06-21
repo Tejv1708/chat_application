@@ -11,21 +11,21 @@ const ChatBody = ( { messages, user, friendConversationId, id } ) => {
     const [ username, setUserName ] = useState( localStorage.getItem( "userName" ) )
 
 
-    useEffect( () => {
-        try {
-            async function getMessage() {
-                const { data } = await instance.get( `/message/${ friendConversationId }/${ id }` )
-                setChatMessages( messages );
-                console.log( data )
-            }
-            getMessage()
-        } catch ( err ) {
-            console.log( err )
-        }
+    // useEffect( () => {
+    //     try {
+    //         async function getMessage() {
+    //             const { data } = await instance.get( `/message/${ friendConversationId }/${ id }` )
+    //             setChatMessages( messages );
+    //             console.log( "Data from the ChatBody", data )
+    //         }
+    //         getMessage()
+    //     } catch ( err ) {
+    //         console.log( err )
+    //     }
 
-    }, [ messages ] );
+    // }, [ messages ] );
 
-    console.log( messages )
+    // console.log( messages )
 
     const handleLeaveChat = async () => {
         localStorage.removeItem( 'userName' );
@@ -53,7 +53,7 @@ const ChatBody = ( { messages, user, friendConversationId, id } ) => {
                 {/* This shows messages */ }
                 <div className="flex-grow overflow-y-auto p-4">
                     <ul>
-                        { chatMessages && chatMessages.map( ( data, index ) => (
+                        { messages && messages.map( ( data, index ) => (
                             <li
                                 key={ index }
                                 ref={ chatMessages.length === index + 1 ? lastMessageRef : null }
@@ -64,7 +64,7 @@ const ChatBody = ( { messages, user, friendConversationId, id } ) => {
                                     }` }>
                                     <p className="text-sm font-semibold mr-0">{ data.name }</p>
                                     <p className="text-xs text-gray-400 ">{ convertTimestampToTime( data.createdAt ) }</p>
-                                    <p>{ data.text }</p>
+                                    <p>{ data.message }</p>
                                 </div>
                             </li>
                         ) ) }

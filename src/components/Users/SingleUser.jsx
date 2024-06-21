@@ -13,7 +13,6 @@ const SingleUser = ( { socket } ) => {
     const [ data, setData ] = useState( null )
     const navigate = useNavigate();
     const handleConversationId = async () => {
-
         try {
             const { data } = await instance.post( '/create-conversation', {
                 sender_id,
@@ -23,6 +22,10 @@ const SingleUser = ( { socket } ) => {
             setData( data )
             navigate( `/users/${ id }/${ data.data._id }` )
             console.log( "Data from Create Conversation : ", data )
+            socket.emit( 'send-friend-request', {
+                receiver_id,
+                sender_id
+            } )
         } catch ( err ) {
             console.log( err )
             setShowError( true )
